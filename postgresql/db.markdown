@@ -23,7 +23,7 @@
     create index on test (userid) // btree index
     create index on test (score); // btree index
 
-测试数据 [test.py](https://github.com/lmyyao/blog/edit/master/postgresql/test.py)
+测试数据 python 脚本 [test.py](https://github.com/lmyyao/blog/edit/master/postgresql/test.py)
 
 ```
 获取中奖用户
@@ -45,7 +45,7 @@ select count(*) from (select count(userid) from test group by userid having coun
 ```
 
 
-用例2 2.py
+用例2 python 脚本[test1.py](https://github.com/lmyyao/blog/edit/master/postgresql/test1.py)
 
 表结构
     create table test1（userid varchar(255), score int[]）; //辅助字段略
