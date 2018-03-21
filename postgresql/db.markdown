@@ -23,7 +23,7 @@
     create index on test (userid) // btree index
     create index on test (score); // btree index
 
-测试数据 1.py
+测试数据 [test.py](https://github.com/lmyyao/blog/edit/master/postgresql/test.py)
 
 ```
 获取中奖用户
