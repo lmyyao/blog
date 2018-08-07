@@ -122,6 +122,7 @@ Test=# select set_enable_parent('part_test'::regclass, false);
                   
 
 Refer:
+
 [https://yq.aliyun.com/articles/62314](https://yq.aliyun.com/articles/62314#)
 
 [https://github.com/postgrespro/pg_pathman](https://github.com/postgrespro/pg_pathman)
