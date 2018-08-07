@@ -37,3 +37,60 @@ Telegraf是一个Influxdata的数据采集套件，使用起来跟Collectd、Sta
 15 ./telegraf --input-filter supervisor config > telegraf.conf
 
 16 ./telegraf --config telegraf.conf --test
+
+```go
+package supervisor
+
+import (
+	"fmt"
+	"github.com/influxdata/telegraf"
+	"github.com/influxdata/telegraf/plugins/inputs"
+	"github.com/kolo/xmlrpc"
+)
+
+type Supervisor struct {
+	Server string
+	infos  []Info
+}
+type Info struct {
+	name      string
+	pid       int64
+	statename string
+}
+
+func (s *Supervisor) Description() string {
+	return "Read metrics from supervisord"
+}
+
+var config = `
+  ## If no servers are specified, then localhost is used as the host.
+  server = "http://localhost:9001/RPC2"
+`
+
+func (s *Supervisor) SampleConfig() string {
+	return config
+}
+
+func (s *Supervisor) Gather(acc telegraf.Accumulator) error {
+	if len(s.Server) == 0 {
+		s.Server = "http://localhost:9001/RPC2"
+	}
+	client, err := xmlrpc.NewClient("http://127.0.0.1:9001/RPC2", nil)
+	if err != nil {
+		return fmt.Errorf("Unable connect  to address %s: %v", s.Server, err)
+	}
+	var reply = make([]map[string]interface{}, 10)
+	client.Call("supervisor.getAllProcessInfo", nil, &reply)
+	//s.infos = make([]Info, len(reply))
+
+	for _, info := range reply {
+		acc.AddFields("supervisor", map[string]interface{}{"name": info["name"], "pid": info["pid"]}, map[string]string{"statename": info["statename"].(string)})
+	}
+
+	return nil
+}
+
+func init() {
+	inputs.Add("supervisor", func() telegraf.Input { return &Supervisor{} })
+}
+```
