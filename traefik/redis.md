@@ -29,7 +29,9 @@
    
 
 4. **服务检测**
+
    `set traefik/http/services/lmyservice/loadBalancer/healthCheck/interval 5`
+   
    `set traefik/http/services/lmyservice/loadBalancer/healthCheck/path /`
 
    
